@@ -1,0 +1,44 @@
+<div class="container">
+  <div class="row row-padded">
+
+    <!--Filter Content-->
+    <div class="col-xs-12">
+      <div class="input-group">
+        <span class="input-group-addon">Search:</span>
+        <input type="text" class="form-control" ng-model="query" />
+      </div>
+    </div>
+
+  </div>
+  <div class="row row-padded">
+
+    <!--ErrorMessage-->
+    <div class="col-xs-12" ng-show="error.error">
+      <div class="alert alert-danger">
+        <span class="badge pull-right">{{error.code}}</span>
+        Error: Unable to connect to server.
+      </div>
+    </div>
+
+    <!--Body Content-->
+    <div class="col-xs-12">
+      <div class="list-group">
+        <a ng-repeat="group in groups | filter:query" class="list-group-item" href="#/group/{{group.groupId}}">
+          <span class="badge">{{group.groupId}}</span>
+          {{group.name}}
+        </a>
+      </div>
+    </div>
+
+  </div>
+  <div class="row">
+
+    <!--Actions-->
+    <div class="col-xs-12">
+      <div class="btn-group">
+        <a class="btn btn-success" href="#/group/new" role="button">New</a>
+      </div>
+    </div>
+
+  </div>
+</div>

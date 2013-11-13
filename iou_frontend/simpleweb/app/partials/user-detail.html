@@ -1,0 +1,41 @@
+<div class="container">
+  <div class="row row-padded">
+
+    <!--Icon-->
+    <div class="col-xs-3">
+      <img src="http://placehold.it/128x128" />
+    </div>
+
+    <!--UserInfo-->
+    <div class="col-xs-9">
+      <h1>{{user.firstName}} {{user.lastName}}</h1>
+      <p>{{user.email}}</p>
+    </div>
+
+  </div>
+
+  <!--Groups-->
+  <div class="row row-padded">
+    <div class="col-xs-12">
+      <div class="list-group">
+        <a ng-repeat="group in groups" class="list-group-item" href="#/group/{{group.groupId}}">
+          <span class="badge">{{group.groupId}}</span>
+          {{group.name}}
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!--Events-->
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="list-group">
+        <a ng-repeat="event in events" class="list-group-item" href="#/event/{{event.eventId}}">
+          <span class="badge">{{event.eventId}}</span>
+          {{event.name}}
+        </a>
+      </div>
+    </div>
+  </div>
+
+</div>
