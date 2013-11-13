@@ -16,10 +16,10 @@ VALUES ('teodor', 'jakobsson', 'teja@email.com', NULL, NULL),
        ('joel',   'nises',     'joni@email.com', NULL, NULL),
        ('justine','trenh',     'jutr@email.com', NULL, NULL);
 
-INSERT INTO t_group (name, modify_date, create_date)
-VALUES ('busy_waiting', NULL, NULL),
-       ('jakobsson', NULL, NULL),
-       ('home', NULL, NULL);
+INSERT INTO t_group (name, description, modify_date, create_date)
+VALUES ('busy_waiting', '', NULL, NULL),
+       ('jakobsson', '', NULL, NULL),
+       ('home', '', NULL, NULL);
 
 INSERT INTO t_user_group (user_id, group_id, modify_date, create_date)
  SELECT u.user_id, g.group_id, NULL, NULL

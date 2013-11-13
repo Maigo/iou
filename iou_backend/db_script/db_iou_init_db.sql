@@ -23,6 +23,7 @@ CREATE TABLE t_user (
 CREATE TABLE t_group (
   group_id INT NOT NULL AUTO_INCREMENT,
   name VARCHAR(45) NOT NULL,
+  description VARCHAR(255) NULL,
   modify_date TIMESTAMP,
   create_date TIMESTAMP,
   PRIMARY KEY (group_id)
@@ -42,7 +43,7 @@ CREATE TABLE t_user_group (
 CREATE TABLE t_event (
   event_id INT NOT NULL AUTO_INCREMENT,
   name VARCHAR(45) NOT NULL,
-  description VARCHAR(45) NULL,
+  description VARCHAR(255) NULL,
   date DATETIME NOT NULL,
   modify_date TIMESTAMP,
   create_date TIMESTAMP,
