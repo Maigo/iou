@@ -1,37 +1,39 @@
 rest end-points:
 
-GET	/rest/user			# list all users
-GET	/rest/user/{id}			# list user with given id
-POST	/rest/user			# create user
-PUT	/rest/user/{id}			# update user with given id
-DELETE	/rest/user/{id}			# delete user with given id
+GET     /rest/meta/group                 # list meta information about group class
 
-GET	/rest/group			# list all groups
-GET	/rest/group/{id}		# list group with given id
-POST	/rest/group			# create group
-PUT	/rest/group/{id}		# update group with given id
-DELETE	/rest/group/{id}		# delete group with given id
+GET     /rest/user                       # list all users
+GET     /rest/user/{id}                  # list user with given id
+POST    /rest/user                       # create user
+PUT     /rest/user/{id}                  # update user with given id
+DELETE  /rest/user/{id}                  # delete user with given id
 
-GET	/rest/event			# list all events
-GET	/rest/event/{id}		# list event with given id
-POST	/rest/event			# create event
-PUT	/rest/event/{id}		# update event with given id
-DELETE	/rest/event/{id}		# delete event with given id
+GET     /rest/group                      # list all groups
+GET     /rest/group/{id}                 # list group with given id
+POST    /rest/group                      # create group
+PUT     /rest/group/{id}                 # update group with given id
+DELETE  /rest/group/{id}                 # delete group with given id
 
-GET	/rest/transaction		# list all transactions		# only debug
-GET	/rest/transaction/{id}		#				# only debug
+GET     /rest/event                      # list all events
+GET     /rest/event/{id}                 # list event with given id
+POST    /rest/event                      # create event
+PUT     /rest/event/{id}                 # update event with given id
+DELETE  /rest/event/{id}                 # delete event with given id
 
-GET	/rest/user/{id}/group		# list all groups for given user
-GET	/rest/user/{id}/group/{id}	#
+GET     /rest/transaction                # list all transactions   # only debug
+GET     /rest/transaction/{id}           #                         # only debug
 
-GET	/rest/user/{id}/event		# list all events for given user
-GET	/rest/user/{id}/event/{id}	#
+GET     /rest/user/{id}/group            # list all groups for given user
+GET     /rest/user/{id}/group/{id}       #
 
-GET	/rest/user/{id}/transaction	# list all transactions for given user
-GET	/rest/user/{id}/transaction/{id}#
+GET     /rest/user/{id}/event            # list all events for given user
+GET     /rest/user/{id}/event/{id}       #
 
-GET	/rest/group/{id}/user		# list all users for given group
-GET	/rest/group/{id}/user/{id}	#
+GET     /rest/user/{id}/transaction      # list all transactions for given user
+GET     /rest/user/{id}/transaction/{id} #
 
-GET	/rest/event/{id}/user		# list all users for given event
-GET	/rest/event/{id}/user/{id}	#
+GET     /rest/group/{id}/user            # list all users for given group
+GET     /rest/group/{id}/user/{id}       #
+
+GET     /rest/event/{id}/user            # list all users for given event
+GET     /rest/event/{id}/user/{id}       #
