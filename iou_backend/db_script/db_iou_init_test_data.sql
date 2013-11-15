@@ -8,7 +8,37 @@ DELETE FROM t_user_group;
 DELETE FROM t_group;
 DELETE FROM t_user;
 
+DELETE FROM t_account_role;
+DELETE FROM t_role;
+DELETE FROM t_account;
+
 # insert test values
+INSERT INTO t_account (auth_id, auth_pwd, enabled, modify_date, create_date)
+VALUES ('admin', 'admin123', true, NULL, NULL),
+       ('test',  'test123',  true, NULL, NULL),
+       ('guest', 'guest123', true, NULL, NULL);
+
+INSERT INTO t_role (name, description, modify_date, create_date)
+VALUES ('admin', '', NULL, NULL),
+       ('user',  '', NULL, NULL),
+       ('guest', '', NULL, NULL);
+
+INSERT INTO t_account_role (account_id, role_id, modify_date, create_date)
+ SELECT a.account_id, r.role_id, NULL, NULL
+ FROM t_account a
+ LEFT JOIN t_role r ON (r.name = 'admin')
+ WHERE a.auth_id IN ('admin')
+UNION ALL
+ SELECT a.account_id, r.role_id, NULL, NULL
+ FROM t_account a
+ LEFT JOIN t_role r ON (r.name = 'user')
+ WHERE a.auth_id IN ('test')
+UNION ALL
+ SELECT a.account_id, r.role_id, NULL, NULL
+ FROM t_account a
+ LEFT JOIN t_role r ON (r.name = 'guest')
+ WHERE a.auth_id IN ('guest');
+
 INSERT INTO t_user (first_name, last_name, email, modify_date, create_date)
 VALUES ('teodor', 'jakobsson', 'teja@email.com', NULL, NULL),
        ('erik',   'jakobsson', 'erja@email.com', NULL, NULL),
