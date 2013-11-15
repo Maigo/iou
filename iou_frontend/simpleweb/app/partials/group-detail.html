@@ -1,27 +1,56 @@
 <div class="container">
-  <div class="row row-padded">
 
-    <!--Icon-->
-    <div class="col-xs-3">
-      <img src="http://placehold.it/128x128" />
+  <!--ErrorMessage-->
+  <div class="row" ng-show="error">
+    <div class="col-xs-12">
+      <div class="alert alert-danger">
+        <span class="badge pull-right">{{error.code}}</span>
+        Error: Unable to connect to server.
+      </div>
     </div>
-
-    <!--GroupInfo-->
-    <div class="col-xs-9">
-      <h1>{{group.name}}</h1>
-      <p>Description: {{group.description}}</p>
-    </div>
-
   </div>
 
-  <!--GroupMembers-->
   <div class="row">
     <div class="col-xs-12">
-      <div class="list-group">
-        <a ng-repeat="user in users" class="list-group-item" href="#/user/{{user.userId}}">
-          <span class="badge">{{user.userId}}</span>
-          {{user.firstName}} {{user.lastName}}
-        </a>
+      <div class="panel panel-default">
+        <div class="panel-heading">Group</div>
+
+        <div class="panel-body">
+          <div class="row">
+
+            <!--Icon-->
+            <div class="col-xs-4">
+              <img src="http://placehold.it/128x128" alt="" class="img-rounded img-responsive" />
+            </div>
+
+            <!--GroupInfo-->
+            <div class="col-xs-8">
+              <h3>{{group.name}}</h3>
+              <p>{{group.description}}</p>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!--Users-->
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="panel panel-default">
+        <div class="panel-heading">Users</div>
+        <div class="panel-body" ng-show="false"></div>
+        <div class="list-group">
+          <a ng-repeat="user in users" class="list-group-item" href="#/user/{{user.userId}}">
+            <span class="badge">{{user.userId}}</span>
+            {{user.firstName}} {{user.lastName}}
+          </a>
+          <div class="list-group-item" ng-hide="users.length">
+            <div class="text-center text-muted"><em>Empty</em></div>
+          </div>
+        </div>
       </div>
     </div>
   </div>

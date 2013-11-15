@@ -1,32 +1,45 @@
 <div class="container">
-  <div class="row row-padded">
 
-    <!--Filter Content-->
+  <!--ErrorMessage-->
+  <div class="row" ng-show="error">
     <div class="col-xs-12">
-      <div class="input-group">
-        <span class="input-group-addon">Search:</span>
-        <input type="text" class="form-control" ng-model="query" />
-      </div>
-    </div>
-
-  </div>
-  <div class="row row-padded">
-
-    <!--ErrorMessage-->
-    <div class="col-xs-12" ng-show="error.error">
       <div class="alert alert-danger">
         <span class="badge pull-right">{{error.code}}</span>
         Error: Unable to connect to server.
       </div>
     </div>
+  </div>
+
+  <div class="row">
+
+    <!--Filter Content-->
+    <div class="col-xs-12">
+      <div class="list-group-head">
+        <div class="input-group">
+          <span class="input-group-addon">Search:</span>
+          <input type="text" class="form-control" ng-model="query" />
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="row">
 
     <!--Body Content-->
     <div class="col-xs-12">
-      <div class="list-group">
-        <a ng-repeat="group in groups | filter:query" class="list-group-item" href="#/group/{{group.groupId}}">
-          <span class="badge">{{group.groupId}}</span>
-          {{group.name}}
-        </a>
+      <div class="panel panel-default">
+        <div class="panel-heading">Groups</div>
+        <div class="panel-body" ng-show="false"></div>
+        <div class="list-group">
+          <a class="list-group-item" href="#/group/{{group.groupId}}"
+              ng-repeat="group in fgroups = (groups | filter:query)">
+            <span class="badge">{{group.groupId}}</span>
+            {{group.name}}
+          </a>
+          <div class="list-group-item" ng-hide="fgroups.length">
+            <div class="text-center text-muted"><em>Empty</em></div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -36,7 +49,10 @@
     <!--Actions-->
     <div class="col-xs-12">
       <div class="btn-group">
-        <a class="btn btn-success" href="#/group/new" role="button">New</a>
+        <a class="btn btn-labeled btn-success" href="#/group/new" role="button">
+          <span class="btn-label"><i class="glyphicon glyphicon-plus"></i></span>
+          New
+        </a>
       </div>
     </div>
 

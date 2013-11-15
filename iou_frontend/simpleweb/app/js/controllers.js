@@ -6,15 +6,15 @@ var iouControllers = angular.module('iouControllers', []);
 
 iouControllers.controller('IouGroupListCtrl', ['$scope', 'Group',
   function IouGroupListCtrl($scope, Group) {
-    $scope.error = {error: false, code: 0};
+    $scope.error = null;
 
     $scope.groups = Group.query({}, function() {}, function(response) {
-      $scope.error = {error: true, code: response.status};
+      $scope.error = {code: response.status};
     });
   }]);
 
 iouControllers.controller('IouGroupNewCtrl', ['$scope', '$location', 'Group',
-  function IouGroupListCtrl($scope, $location, Group) {
+  function IouGroupNewCtrl($scope, $location, Group) {
     
     $scope.group = {};
 
@@ -28,21 +28,33 @@ iouControllers.controller('IouGroupNewCtrl', ['$scope', '$location', 'Group',
 
 iouControllers.controller('IouGroupDetailCtrl', ['$scope', '$routeParams', 'Group', 'User',
   function IouGroupDetailCtrl($scope, $routeParams, Group, User) {
-    $scope.group = Group.get({groupId: $routeParams.groupId});
-    $scope.users = User.query({filter:'group', filterId:$routeParams.groupId});
+    $scope.error = null;
+
+    $scope.group = Group.get({groupId: $routeParams.groupId},
+      function() {},
+      function(response) {
+        $scope.error = {code: response.status};
+        $scope.group = {name: "unknown", description: "unknown"};
+      });
+    $scope.users = User.query({filter:'group', filterId:$routeParams.groupId},
+      function() {},
+      function(response) {
+        $scope.error = {code: response.status};
+        $scope.group = {name: "unknown", description: "unknown"};
+      });
   }]);
 
 iouControllers.controller('IouUserListCtrl', ['$scope', 'User',
   function IouUserListCtrl($scope, User) {
-    $scope.error = {error: false, code: 0};
+    $scope.error = null;
 
     $scope.users = User.query({}, function() {}, function(response) {
-      $scope.error = {error: true, code: response.code};
+      $scope.error = {code: response.code};
     });
   }]);
 
 iouControllers.controller('IouUserNewCtrl', ['$scope', '$location', 'User',
-  function IouUserListCtrl($scope, $location, User) {
+  function IouUserNewCtrl($scope, $location, User) {
 
     $scope.user = {};
 
@@ -56,8 +68,19 @@ iouControllers.controller('IouUserNewCtrl', ['$scope', '$location', 'User',
 
 iouControllers.controller('IouUserDetailCtrl', ['$scope', '$routeParams', 'User', 'Group', 'Event',
   function IouGroupDetailCtrl($scope, $routeParams, User, Group, Event) {
-    $scope.user   = User.get({userId: $routeParams.userId});
+    $scope.error = null;
+
+    $scope.user   = User.get({userId: $routeParams.userId},
+      function() {},
+      function(response) {
+        $scope.error = {code: response.status};
+      });
     $scope.groups = Group.query({filter:'user',filterId:$routeParams.userId});
     $scope.events = Event.query({filter:'user',filterId:$routeParams.userId});
+  }]);
+
+iouControllers.controller('IouLoginCtrl', ['$scope',
+  function IouLoginCtrl($scope) {
+
   }]);
 

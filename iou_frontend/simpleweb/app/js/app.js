@@ -36,6 +36,10 @@ iouApp.config(['$routeProvider',
         templateUrl: 'partials/user-detail.html',
         controller: 'IouUserDetailCtrl'
       }).
+      when('/login', {
+        templateUrl: 'partials/login.html',
+        controller: 'IouLoginCtrl'
+      }).
       otherwise({
         redirectTo: '/group'
       });
