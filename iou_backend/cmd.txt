@@ -1,0 +1,1 @@
+mvn archetype:generate -DgroupId=com.maigo.iou -Dpackage=com.maigo.iou -DartifactId=ioudataresource -DarchetypeArtifactId=jersey-quickstart-webapp -DarchetypeGroupId=org.glassfish.jersey.archetypes -DarchetypeVersion=2.4.1 -DinteractiveMode=false

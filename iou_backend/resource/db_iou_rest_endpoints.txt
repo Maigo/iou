@@ -2,6 +2,21 @@ rest end-points:
 
 GET     /rest/meta/group                 # list meta information about group class
 
+GET     /rest/account                    # list all accounts
+GET     /rest/account/{id}               # list account with given id
+POST    /rest/account                    # create account
+PUT     /rest/account/{id}               # update account with given id
+DELETE  /rest/account/{id}               # delete account with given id
+
+GET     /rest/role                       # list all roles
+GET     /rest/role/{id}                  # list role with given id
+POST    /rest/role                       # create role
+PUT     /rest/role/{id}                  # update role with given id
+DELETE  /rest/role/{id}                  # delete role with given id
+
+GET     /rest/account/{id}/role          # list all roles for given account
+
+
 GET     /rest/user                       # list all users
 GET     /rest/user/{id}                  # list user with given id
 POST    /rest/user                       # create user

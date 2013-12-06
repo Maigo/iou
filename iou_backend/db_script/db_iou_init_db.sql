@@ -17,7 +17,7 @@ DROP TABLE IF EXISTS t_account;
 CREATE TABLE t_account (
   account_id INT NOT NULL AUTO_INCREMENT,
   auth_id VARCHAR(45) NOT NULL,
-  auth_pwd VARCHAR(45) NOT NULL,
+  auth_password VARCHAR(45) NOT NULL,
   enabled BIT NOT NULL DEFAULT TRUE,
   modify_date TIMESTAMP,
   create_date TIMESTAMP,

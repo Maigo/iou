@@ -13,7 +13,7 @@ DELETE FROM t_role;
 DELETE FROM t_account;
 
 # insert test values
-INSERT INTO t_account (auth_id, auth_pwd, enabled, modify_date, create_date)
+INSERT INTO t_account (auth_id, auth_password, enabled, modify_date, create_date)
 VALUES ('admin', 'admin123', true, NULL, NULL),
        ('test',  'test123',  true, NULL, NULL),
        ('guest', 'guest123', true, NULL, NULL);
