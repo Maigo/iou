@@ -25,12 +25,15 @@ public class GroupDAOImpl implements GroupDAO {
     @Override
     public List<Group> findGroupAll() {
         List<Group> list = new ArrayList<Group>();
-        Connection c = null;
+
+        Connection cn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
 
         try {
-            c = ConnectionHelper.getConnection();
-            PreparedStatement ps = c.prepareStatement(QTPL_SELECT_ALL);
-            ResultSet rs = ps.executeQuery();
+            cn = ConnectionHelper.getConnection();
+            ps = cn.prepareStatement(QTPL_SELECT_ALL);
+            rs = ps.executeQuery();
 
             while (rs.next()) {
                 list.add(processResultSet(rs));
@@ -39,7 +42,9 @@ public class GroupDAOImpl implements GroupDAO {
             e.printStackTrace();
             throw new RuntimeException(e);
         } finally {
-            ConnectionHelper.close(c);
+            try { rs.close(); } catch (SQLException e) { e.printStackTrace(); }
+            try { ps.close(); } catch (SQLException e) { e.printStackTrace(); }
+            try { cn.close(); } catch (SQLException e) { e.printStackTrace(); }
         }
         return list;
     }
@@ -47,13 +52,16 @@ public class GroupDAOImpl implements GroupDAO {
     @Override
     public Group findGroupByGroupId(int groupId) {
         Group group = null;
-        Connection c = null;
+
+        Connection cn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
 
         try {
-            c = ConnectionHelper.getConnection();
-            PreparedStatement ps = c.prepareStatement(QTPL_SELECT_BY_GROUP_ID);
+            cn = ConnectionHelper.getConnection();
+            ps = cn.prepareStatement(QTPL_SELECT_BY_GROUP_ID);
             ps.setInt(1, groupId);
-            ResultSet rs = ps.executeQuery();
+            rs = ps.executeQuery();
 
             if (rs.next()) {
                 group = processResultSet(rs);
@@ -62,7 +70,9 @@ public class GroupDAOImpl implements GroupDAO {
             e.printStackTrace();
             throw new RuntimeException(e);
         } finally {
-            ConnectionHelper.close(c);
+            try { rs.close(); } catch (SQLException e) { e.printStackTrace(); }
+            try { ps.close(); } catch (SQLException e) { e.printStackTrace(); }
+            try { cn.close(); } catch (SQLException e) { e.printStackTrace(); }
         }
         return group;
     }
@@ -70,13 +80,16 @@ public class GroupDAOImpl implements GroupDAO {
     @Override
     public List<Group> findGroupByUserId(int userId) {
         List<Group> list = new ArrayList<Group>();
-        Connection c = null;
+
+        Connection cn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
 
         try {
-            c = ConnectionHelper.getConnection();
-            PreparedStatement ps = c.prepareStatement(QTPL_SELECT_BY_USER_ID);
+            cn = ConnectionHelper.getConnection();
+            ps = cn.prepareStatement(QTPL_SELECT_BY_USER_ID);
             ps.setInt(1, userId);
-            ResultSet rs = ps.executeQuery();
+            rs = ps.executeQuery();
 
             while (rs.next()) {
                 list.add(processResultSet(rs));
@@ -85,7 +98,9 @@ public class GroupDAOImpl implements GroupDAO {
             e.printStackTrace();
             throw new RuntimeException(e);
         } finally {
-            ConnectionHelper.close(c);
+            try { rs.close(); } catch (SQLException e) { e.printStackTrace(); }
+            try { ps.close(); } catch (SQLException e) { e.printStackTrace(); }
+            try { cn.close(); } catch (SQLException e) { e.printStackTrace(); }
         }
         return list;
     }
@@ -93,15 +108,17 @@ public class GroupDAOImpl implements GroupDAO {
     @Override
     public Group findGroupByGroupIdAndUserId(int groupId, int userId) {
         Group group = null;
-        Connection c = null;
+
+        Connection cn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
 
         try {
-            c = ConnectionHelper.getConnection();
-            PreparedStatement ps = c
-                    .prepareStatement(QTPL_SELECT_BY_USER_ID_AND_GROUP_ID);
+            cn = ConnectionHelper.getConnection();
+            ps = cn.prepareStatement(QTPL_SELECT_BY_USER_ID_AND_GROUP_ID);
             ps.setInt(1, userId);
             ps.setInt(2, groupId);
-            ResultSet rs = ps.executeQuery();
+            rs = ps.executeQuery();
 
             if (rs.next()) {
                 group = processResultSet(rs);
@@ -110,24 +127,27 @@ public class GroupDAOImpl implements GroupDAO {
             e.printStackTrace();
             throw new RuntimeException(e);
         } finally {
-            ConnectionHelper.close(c);
+            try { rs.close(); } catch (SQLException e) { e.printStackTrace(); }
+            try { ps.close(); } catch (SQLException e) { e.printStackTrace(); }
+            try { cn.close(); } catch (SQLException e) { e.printStackTrace(); }
         }
         return group;
     }
 
     @Override
     public Group createGroup(Group group) {
-        Connection c = null;
+        Connection cn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
 
         try {
-            c = ConnectionHelper.getConnection();
-            PreparedStatement ps = c.prepareStatement(QTPL_INSERT_GROUP,
-                    new String[] { "group_id" });
+            cn = ConnectionHelper.getConnection();
+            ps = cn.prepareStatement(QTPL_INSERT_GROUP, new String[] { "group_id" });
             ps.setString(1, group.getName());
             ps.setString(2, group.getDescription());
             ps.executeUpdate();
 
-            ResultSet rs = ps.getGeneratedKeys();
+            rs = ps.getGeneratedKeys();
             if (rs.next()) {
                 int groupId = rs.getInt(1);
                 group.setGroupId(groupId);
@@ -136,7 +156,9 @@ public class GroupDAOImpl implements GroupDAO {
             e.printStackTrace();
             throw new RuntimeException(e);
         } finally {
-            ConnectionHelper.close(c);
+            try { rs.close(); } catch (SQLException e) { e.printStackTrace(); }
+            try { ps.close(); } catch (SQLException e) { e.printStackTrace(); }
+            try { cn.close(); } catch (SQLException e) { e.printStackTrace(); }
         }
         return group;
     }
@@ -145,11 +167,12 @@ public class GroupDAOImpl implements GroupDAO {
     public Group updateGroupByGroupId(Group group, int groupId) {
         assert group.getGroupId() == groupId;
 
-        Connection c = null;
+        Connection cn = null;
+        PreparedStatement ps = null;
 
         try {
-            c = ConnectionHelper.getConnection();
-            PreparedStatement ps = c.prepareStatement(QTPL_UPDATE_GROUP);
+            cn = ConnectionHelper.getConnection();
+            ps = cn.prepareStatement(QTPL_UPDATE_GROUP);
             ps.setString(1, group.getName());
             ps.setString(2, group.getDescription());
             ps.setInt(2, group.getGroupId());
@@ -158,25 +181,28 @@ public class GroupDAOImpl implements GroupDAO {
             e.printStackTrace();
             throw new RuntimeException(e);
         } finally {
-            ConnectionHelper.close(c);
+            try { ps.close(); } catch (SQLException e) { e.printStackTrace(); }
+            try { cn.close(); } catch (SQLException e) { e.printStackTrace(); }
         }
         return group;
     }
 
     @Override
     public void deleteGroupByGroupId(int groupId) {
-        Connection c = null;
+        Connection cn = null;
+        PreparedStatement ps = null;
 
         try {
-            c = ConnectionHelper.getConnection();
-            PreparedStatement ps = c.prepareStatement(QTPL_DELETE_GROUP);
+            cn = ConnectionHelper.getConnection();
+            ps = cn.prepareStatement(QTPL_DELETE_GROUP);
             ps.setInt(1, groupId);
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
         } finally {
-            ConnectionHelper.close(c);
+            try { ps.close(); } catch (SQLException e) { e.printStackTrace(); }
+            try { cn.close(); } catch (SQLException e) { e.printStackTrace(); }
         }
     }
 

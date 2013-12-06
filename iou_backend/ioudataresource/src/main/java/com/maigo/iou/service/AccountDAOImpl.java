@@ -25,12 +25,15 @@ public class AccountDAOImpl implements AccountDAO {
     @Override
     public List<Account> findAccountAll() {
         List<Account> list = new ArrayList<Account>();
-        Connection c = null;
+
+        Connection cn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
 
         try {
-            c = ConnectionHelper.getConnection();
-            PreparedStatement ps = c.prepareStatement(QTPL_SELECT_ALL);
-            ResultSet rs = ps.executeQuery();
+            cn = ConnectionHelper.getConnection();
+            ps = cn.prepareStatement(QTPL_SELECT_ALL);
+            rs = ps.executeQuery();
 
             while (rs.next()) {
                 list.add(processResultSet(rs));
@@ -39,7 +42,9 @@ public class AccountDAOImpl implements AccountDAO {
             e.printStackTrace();
             throw new RuntimeException(e);
         } finally {
-            ConnectionHelper.close(c);
+            try { rs.close(); } catch (SQLException e) { e.printStackTrace(); }
+            try { ps.close(); } catch (SQLException e) { e.printStackTrace(); }
+            try { cn.close(); } catch (SQLException e) { e.printStackTrace(); }
         }
         return list;
     }
@@ -47,13 +52,16 @@ public class AccountDAOImpl implements AccountDAO {
     @Override
     public Account findAccountByAccountId(int accountId) {
         Account account = null;
-        Connection c = null;
+
+        Connection cn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
 
         try {
-            c = ConnectionHelper.getConnection();
-            PreparedStatement ps = c.prepareStatement(QTPL_SELECT_BY_ACCOUNT_ID);
+            cn = ConnectionHelper.getConnection();
+            ps = cn.prepareStatement(QTPL_SELECT_BY_ACCOUNT_ID);
             ps.setInt(1, accountId);
-            ResultSet rs = ps.executeQuery();
+            rs = ps.executeQuery();
 
             if (rs.next()) {
                 account = processResultSet(rs);
@@ -62,7 +70,9 @@ public class AccountDAOImpl implements AccountDAO {
             e.printStackTrace();
             throw new RuntimeException(e);
         } finally {
-            ConnectionHelper.close(c);
+            try { rs.close(); } catch (SQLException e) { e.printStackTrace(); }
+            try { ps.close(); } catch (SQLException e) { e.printStackTrace(); }
+            try { cn.close(); } catch (SQLException e) { e.printStackTrace(); }
         }
         return account;
     }
@@ -70,13 +80,16 @@ public class AccountDAOImpl implements AccountDAO {
     @Override
     public List<Account> findAccountByRoleId(int roleId) {
         List<Account> list = new ArrayList<Account>();
-        Connection c = null;
+
+        Connection cn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
 
         try {
-            c = ConnectionHelper.getConnection();
-            PreparedStatement ps = c.prepareStatement(QTPL_SELECT_BY_ROLE_ID);
+            cn = ConnectionHelper.getConnection();
+            ps = cn.prepareStatement(QTPL_SELECT_BY_ROLE_ID);
             ps.setInt(1, roleId);
-            ResultSet rs = ps.executeQuery();
+            rs = ps.executeQuery();
 
             while (rs.next()) {
                 list.add(processResultSet(rs));
@@ -85,7 +98,9 @@ public class AccountDAOImpl implements AccountDAO {
             e.printStackTrace();
             throw new RuntimeException(e);
         } finally {
-            ConnectionHelper.close(c);
+            try { rs.close(); } catch (SQLException e) { e.printStackTrace(); }
+            try { ps.close(); } catch (SQLException e) { e.printStackTrace(); }
+            try { cn.close(); } catch (SQLException e) { e.printStackTrace(); }
         }
         return list;
     }
@@ -93,15 +108,17 @@ public class AccountDAOImpl implements AccountDAO {
     @Override
     public Account findAccountByAccountIdAndRoleId(int accountId, int roleId) {
         Account account = null;
-        Connection c = null;
+
+        Connection cn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
 
         try {
-            c = ConnectionHelper.getConnection();
-            PreparedStatement ps = c
-                    .prepareStatement(QTPL_SELECT_BY_ROLE_ID_AND_ACCOUNT_ID);
+            cn = ConnectionHelper.getConnection();
+            ps = cn.prepareStatement(QTPL_SELECT_BY_ROLE_ID_AND_ACCOUNT_ID);
             ps.setInt(1, roleId);
             ps.setInt(2, accountId);
-            ResultSet rs = ps.executeQuery();
+            rs = ps.executeQuery();
 
             if (rs.next()) {
                 account = processResultSet(rs);
@@ -110,24 +127,26 @@ public class AccountDAOImpl implements AccountDAO {
             e.printStackTrace();
             throw new RuntimeException(e);
         } finally {
-            ConnectionHelper.close(c);
+            try { rs.close(); } catch (SQLException e) { e.printStackTrace(); }
+            try { ps.close(); } catch (SQLException e) { e.printStackTrace(); }
+            try { cn.close(); } catch (SQLException e) { e.printStackTrace(); }
         }
         return account;
     }
 
     @Override
     public Account createAccount(Account account) {
-        Connection c = null;
+        Connection cn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
 
         try {
-            c = ConnectionHelper.getConnection();
-            PreparedStatement ps = c.prepareStatement(QTPL_INSERT_ACCOUNT,
-                    new String[] { "account_id" });
+            cn = ConnectionHelper.getConnection();
+            ps = cn.prepareStatement(QTPL_INSERT_ACCOUNT, new String[] { "account_id" });
             ps.setString(1, account.getAuthId());
             ps.setString(2, account.getAuthPassword());
             ps.executeUpdate();
-
-            ResultSet rs = ps.getGeneratedKeys();
+            rs = ps.getGeneratedKeys();
             if (rs.next()) {
                 int accountId = rs.getInt(1);
                 account.setAccountId(accountId);
@@ -136,7 +155,9 @@ public class AccountDAOImpl implements AccountDAO {
             e.printStackTrace();
             throw new RuntimeException(e);
         } finally {
-            ConnectionHelper.close(c);
+            try { rs.close(); } catch (SQLException e) { e.printStackTrace(); }
+            try { ps.close(); } catch (SQLException e) { e.printStackTrace(); }
+            try { cn.close(); } catch (SQLException e) { e.printStackTrace(); }
         }
         return account;
     }
@@ -145,11 +166,12 @@ public class AccountDAOImpl implements AccountDAO {
     public Account updateAccountByAccountId(Account account, int accountId) {
         assert account.getAccountId() == accountId;
 
-        Connection c = null;
+        Connection cn = null;
+        PreparedStatement ps = null;
 
         try {
-            c = ConnectionHelper.getConnection();
-            PreparedStatement ps = c.prepareStatement(QTPL_UPDATE_ACCOUNT);
+            cn = ConnectionHelper.getConnection();
+            ps = cn.prepareStatement(QTPL_UPDATE_ACCOUNT);
             ps.setString(1, account.getAuthId());
             ps.setString(2, account.getAuthPassword());
             ps.setInt(3, account.getAccountId());
@@ -158,25 +180,28 @@ public class AccountDAOImpl implements AccountDAO {
             e.printStackTrace();
             throw new RuntimeException(e);
         } finally {
-            ConnectionHelper.close(c);
+            try { ps.close(); } catch (SQLException e) { e.printStackTrace(); }
+            try { cn.close(); } catch (SQLException e) { e.printStackTrace(); }
         }
         return account;
     }
 
     @Override
     public void deleteAccountByAccountId(int accountId) {
-        Connection c = null;
+        Connection cn = null;
+        PreparedStatement ps = null;
 
         try {
-            c = ConnectionHelper.getConnection();
-            PreparedStatement ps = c.prepareStatement(QTPL_DELETE_ACCOUNT);
+            cn = ConnectionHelper.getConnection();
+            ps = cn.prepareStatement(QTPL_DELETE_ACCOUNT);
             ps.setInt(1, accountId);
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
         } finally {
-            ConnectionHelper.close(c);
+            try { ps.close(); } catch (SQLException e) { e.printStackTrace(); }
+            try { cn.close(); } catch (SQLException e) { e.printStackTrace(); }
         }
     }
 

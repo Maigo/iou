@@ -25,12 +25,15 @@ public class RoleDAOImpl implements RoleDAO {
     @Override
     public List<Role> findRoleAll() {
         List<Role> list = new ArrayList<Role>();
-        Connection c = null;
+
+        Connection cn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
 
         try {
-            c = ConnectionHelper.getConnection();
-            PreparedStatement ps = c.prepareStatement(QTPL_SELECT_ALL);
-            ResultSet rs = ps.executeQuery();
+            cn = ConnectionHelper.getConnection();
+            ps = cn.prepareStatement(QTPL_SELECT_ALL);
+            rs = ps.executeQuery();
 
             while (rs.next()) {
                 list.add(processResultSet(rs));
@@ -39,7 +42,9 @@ public class RoleDAOImpl implements RoleDAO {
             e.printStackTrace();
             throw new RuntimeException(e);
         } finally {
-            ConnectionHelper.close(c);
+            try { rs.close(); } catch (SQLException e) { e.printStackTrace(); }
+            try { ps.close(); } catch (SQLException e) { e.printStackTrace(); }
+            try { cn.close(); } catch (SQLException e) { e.printStackTrace(); }
         }
         return list;
     }
@@ -47,13 +52,16 @@ public class RoleDAOImpl implements RoleDAO {
     @Override
     public Role findRoleByRoleId(int roleId) {
         Role role = null;
-        Connection c = null;
+
+        Connection cn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
 
         try {
-            c = ConnectionHelper.getConnection();
-            PreparedStatement ps = c.prepareStatement(QTPL_SELECT_BY_ROLE_ID);
+            cn = ConnectionHelper.getConnection();
+            ps = cn.prepareStatement(QTPL_SELECT_BY_ROLE_ID);
             ps.setInt(1, roleId);
-            ResultSet rs = ps.executeQuery();
+            rs = ps.executeQuery();
 
             if (rs.next()) {
                 role = processResultSet(rs);
@@ -62,7 +70,9 @@ public class RoleDAOImpl implements RoleDAO {
             e.printStackTrace();
             throw new RuntimeException(e);
         } finally {
-            ConnectionHelper.close(c);
+            try { rs.close(); } catch (SQLException e) { e.printStackTrace(); }
+            try { ps.close(); } catch (SQLException e) { e.printStackTrace(); }
+            try { cn.close(); } catch (SQLException e) { e.printStackTrace(); }
         }
         return role;
     }
@@ -70,13 +80,16 @@ public class RoleDAOImpl implements RoleDAO {
     @Override
     public List<Role> findRoleByAccountId(int accountId) {
         List<Role> list = new ArrayList<Role>();
-        Connection c = null;
+
+        Connection cn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
 
         try {
-            c = ConnectionHelper.getConnection();
-            PreparedStatement ps = c.prepareStatement(QTPL_SELECT_BY_ACCOUNT_ID);
+            cn = ConnectionHelper.getConnection();
+            ps = cn.prepareStatement(QTPL_SELECT_BY_ACCOUNT_ID);
             ps.setInt(1, accountId);
-            ResultSet rs = ps.executeQuery();
+            rs = ps.executeQuery();
 
             while (rs.next()) {
                 list.add(processResultSet(rs));
@@ -85,7 +98,9 @@ public class RoleDAOImpl implements RoleDAO {
             e.printStackTrace();
             throw new RuntimeException(e);
         } finally {
-            ConnectionHelper.close(c);
+            try { rs.close(); } catch (SQLException e) { e.printStackTrace(); }
+            try { ps.close(); } catch (SQLException e) { e.printStackTrace(); }
+            try { cn.close(); } catch (SQLException e) { e.printStackTrace(); }
         }
         return list;
     }
@@ -93,15 +108,17 @@ public class RoleDAOImpl implements RoleDAO {
     @Override
     public Role findRoleByRoleIdAndAccountId(int roleId, int accountId) {
         Role role = null;
-        Connection c = null;
+
+        Connection cn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
 
         try {
-            c = ConnectionHelper.getConnection();
-            PreparedStatement ps = c
-                    .prepareStatement(QTPL_SELECT_BY_ACCOUNT_ID_AND_ROLE_ID);
+            cn = ConnectionHelper.getConnection();
+            ps = cn.prepareStatement(QTPL_SELECT_BY_ACCOUNT_ID_AND_ROLE_ID);
             ps.setInt(1, accountId);
             ps.setInt(2, roleId);
-            ResultSet rs = ps.executeQuery();
+            rs = ps.executeQuery();
 
             if (rs.next()) {
                 role = processResultSet(rs);
@@ -110,24 +127,28 @@ public class RoleDAOImpl implements RoleDAO {
             e.printStackTrace();
             throw new RuntimeException(e);
         } finally {
-            ConnectionHelper.close(c);
+            try { rs.close(); } catch (SQLException e) { e.printStackTrace(); }
+            try { ps.close(); } catch (SQLException e) { e.printStackTrace(); }
+            try { cn.close(); } catch (SQLException e) { e.printStackTrace(); }
         }
         return role;
     }
 
     @Override
     public Role createRole(Role role) {
-        Connection c = null;
+        Connection cn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
 
         try {
-            c = ConnectionHelper.getConnection();
-            PreparedStatement ps = c.prepareStatement(QTPL_INSERT_ROLE,
+            cn = ConnectionHelper.getConnection();
+            ps = cn.prepareStatement(QTPL_INSERT_ROLE,
                     new String[] { "role_id" });
             ps.setString(1, role.getName());
             ps.setString(2, role.getDescription());
             ps.executeUpdate();
+            rs = ps.getGeneratedKeys();
 
-            ResultSet rs = ps.getGeneratedKeys();
             if (rs.next()) {
                 int roleId = rs.getInt(1);
                 role.setRoleId(roleId);
@@ -136,7 +157,9 @@ public class RoleDAOImpl implements RoleDAO {
             e.printStackTrace();
             throw new RuntimeException(e);
         } finally {
-            ConnectionHelper.close(c);
+            try { rs.close(); } catch (SQLException e) { e.printStackTrace(); }
+            try { ps.close(); } catch (SQLException e) { e.printStackTrace(); }
+            try { cn.close(); } catch (SQLException e) { e.printStackTrace(); }
         }
         return role;
     }
@@ -145,11 +168,12 @@ public class RoleDAOImpl implements RoleDAO {
     public Role updateRoleByRoleId(Role role, int roleId) {
         assert role.getRoleId() == roleId;
 
-        Connection c = null;
+        Connection cn = null;
+        PreparedStatement ps = null;
 
         try {
-            c = ConnectionHelper.getConnection();
-            PreparedStatement ps = c.prepareStatement(QTPL_UPDATE_ROLE);
+            cn = ConnectionHelper.getConnection();
+            ps = cn.prepareStatement(QTPL_UPDATE_ROLE);
             ps.setString(1, role.getName());
             ps.setString(2, role.getDescription());
             ps.setInt(3, role.getRoleId());
@@ -158,25 +182,28 @@ public class RoleDAOImpl implements RoleDAO {
             e.printStackTrace();
             throw new RuntimeException(e);
         } finally {
-            ConnectionHelper.close(c);
+            try { ps.close(); } catch (SQLException e) { e.printStackTrace(); }
+            try { cn.close(); } catch (SQLException e) { e.printStackTrace(); }
         }
         return role;
     }
 
     @Override
     public void deleteRoleByRoleId(int roleId) {
-        Connection c = null;
+        Connection cn = null;
+        PreparedStatement ps = null;
 
         try {
-            c = ConnectionHelper.getConnection();
-            PreparedStatement ps = c.prepareStatement(QTPL_DELETE_ROLE);
+            cn = ConnectionHelper.getConnection();
+            ps = cn.prepareStatement(QTPL_DELETE_ROLE);
             ps.setInt(1, roleId);
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
         } finally {
-            ConnectionHelper.close(c);
+            try { ps.close(); } catch (SQLException e) { e.printStackTrace(); }
+            try { cn.close(); } catch (SQLException e) { e.printStackTrace(); }
         }
     }
 

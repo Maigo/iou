@@ -27,12 +27,15 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public List<User> findUserAll() {
         List<User> list = new ArrayList<User>();
-        Connection c = null;
+
+        Connection cn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
 
         try {
-            c = ConnectionHelper.getConnection();
-            PreparedStatement ps = c.prepareStatement(QTPL_SELECT_ALL);
-            ResultSet rs = ps.executeQuery();
+            cn = ConnectionHelper.getConnection();
+            ps = cn.prepareStatement(QTPL_SELECT_ALL);
+            rs = ps.executeQuery();
 
             while (rs.next()) {
                 list.add(processResultSet(rs));
@@ -41,7 +44,9 @@ public class UserDAOImpl implements UserDAO {
             e.printStackTrace();
             throw new RuntimeException(e);
         } finally {
-            ConnectionHelper.close(c);
+            try { rs.close(); } catch (SQLException e) { e.printStackTrace(); }
+            try { ps.close(); } catch (SQLException e) { e.printStackTrace(); }
+            try { cn.close(); } catch (SQLException e) { e.printStackTrace(); }
         }
         return list;
     }
@@ -49,13 +54,16 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public User findUserByUserId(int userId) {
         User user = null;
-        Connection c = null;
+
+        Connection cn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
 
         try {
-            c = ConnectionHelper.getConnection();
-            PreparedStatement ps = c.prepareStatement(QTPL_SELECT_BY_USER_ID);
+            cn = ConnectionHelper.getConnection();
+            ps = cn.prepareStatement(QTPL_SELECT_BY_USER_ID);
             ps.setInt(1, userId);
-            ResultSet rs = ps.executeQuery();
+            rs = ps.executeQuery();
 
             if (rs.next()) {
                 user = processResultSet(rs);
@@ -64,7 +72,9 @@ public class UserDAOImpl implements UserDAO {
             e.printStackTrace();
             throw new RuntimeException(e);
         } finally {
-            ConnectionHelper.close(c);
+            try { rs.close(); } catch (SQLException e) { e.printStackTrace(); }
+            try { ps.close(); } catch (SQLException e) { e.printStackTrace(); }
+            try { cn.close(); } catch (SQLException e) { e.printStackTrace(); }
         }
         return user;
     }
@@ -72,13 +82,16 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public List<User> findUserByGroupId(int groupId) {
         List<User> list = new ArrayList<User>();
-        Connection c = null;
+
+        Connection cn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
 
         try {
-            c = ConnectionHelper.getConnection();
-            PreparedStatement ps = c.prepareStatement(QTPL_SELECT_BY_GROUP_ID);
+            cn = ConnectionHelper.getConnection();
+            ps = cn.prepareStatement(QTPL_SELECT_BY_GROUP_ID);
             ps.setInt(1, groupId);
-            ResultSet rs = ps.executeQuery();
+            rs = ps.executeQuery();
 
             while (rs.next()) {
                 list.add(processResultSet(rs));
@@ -87,7 +100,9 @@ public class UserDAOImpl implements UserDAO {
             e.printStackTrace();
             throw new RuntimeException(e);
         } finally {
-            ConnectionHelper.close(c);
+            try { rs.close(); } catch (SQLException e) { e.printStackTrace(); }
+            try { ps.close(); } catch (SQLException e) { e.printStackTrace(); }
+            try { cn.close(); } catch (SQLException e) { e.printStackTrace(); }
         }
         return list;
     }
@@ -95,15 +110,17 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public User findUserByUserIdAndGroupId(int userId, int groupId) {
         User user = null;
-        Connection c = null;
+
+        Connection cn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
 
         try {
-            c = ConnectionHelper.getConnection();
-            PreparedStatement ps = c
-                    .prepareStatement(QTPL_SELECT_BY_GROUP_ID_AND_USER_ID);
+            cn = ConnectionHelper.getConnection();
+            ps = cn.prepareStatement(QTPL_SELECT_BY_GROUP_ID_AND_USER_ID);
             ps.setInt(1, groupId);
             ps.setInt(2, userId);
-            ResultSet rs = ps.executeQuery();
+            rs = ps.executeQuery();
 
             if (rs.next()) {
                 user = processResultSet(rs);
@@ -112,7 +129,9 @@ public class UserDAOImpl implements UserDAO {
             e.printStackTrace();
             throw new RuntimeException(e);
         } finally {
-            ConnectionHelper.close(c);
+            try { rs.close(); } catch (SQLException e) { e.printStackTrace(); }
+            try { ps.close(); } catch (SQLException e) { e.printStackTrace(); }
+            try { cn.close(); } catch (SQLException e) { e.printStackTrace(); }
         }
         return user;
     }
@@ -120,13 +139,16 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public List<User> findUserByEventId(int eventId) {
         List<User> list = new ArrayList<User>();
-        Connection c = null;
+
+        Connection cn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
 
         try {
-            c = ConnectionHelper.getConnection();
-            PreparedStatement ps = c.prepareStatement(QTPL_SELECT_BY_EVENT_ID);
+            cn = ConnectionHelper.getConnection();
+            ps = cn.prepareStatement(QTPL_SELECT_BY_EVENT_ID);
             ps.setInt(1, eventId);
-            ResultSet rs = ps.executeQuery();
+            rs = ps.executeQuery();
 
             while (rs.next()) {
                 list.add(processResultSet(rs));
@@ -135,7 +157,9 @@ public class UserDAOImpl implements UserDAO {
             e.printStackTrace();
             throw new RuntimeException(e);
         } finally {
-            ConnectionHelper.close(c);
+            try { rs.close(); } catch (SQLException e) { e.printStackTrace(); }
+            try { ps.close(); } catch (SQLException e) { e.printStackTrace(); }
+            try { cn.close(); } catch (SQLException e) { e.printStackTrace(); }
         }
         return list;
     }
@@ -143,15 +167,17 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public User findUserByUserIdAndEventId(int userId, int eventId) {
         User user = null;
-        Connection c = null;
+
+        Connection cn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
 
         try {
-            c = ConnectionHelper.getConnection();
-            PreparedStatement ps = c
-                    .prepareStatement(QTPL_SELECT_BY_EVENT_ID_AND_USER_ID);
+            cn = ConnectionHelper.getConnection();
+            ps = cn.prepareStatement(QTPL_SELECT_BY_EVENT_ID_AND_USER_ID);
             ps.setInt(1, eventId);
             ps.setInt(2, userId);
-            ResultSet rs = ps.executeQuery();
+            rs = ps.executeQuery();
 
             if (rs.next()) {
                 user = processResultSet(rs);
@@ -160,25 +186,28 @@ public class UserDAOImpl implements UserDAO {
             e.printStackTrace();
             throw new RuntimeException(e);
         } finally {
-            ConnectionHelper.close(c);
+            try { rs.close(); } catch (SQLException e) { e.printStackTrace(); }
+            try { ps.close(); } catch (SQLException e) { e.printStackTrace(); }
+            try { cn.close(); } catch (SQLException e) { e.printStackTrace(); }
         }
         return user;
     }
 
     @Override
     public User createUser(User user) {
-        Connection c = null;
+        Connection cn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
 
         try {
-            c = ConnectionHelper.getConnection();
-            PreparedStatement ps = c.prepareStatement(QTPL_INSERT_USER,
-                    new String[] { "user_id" });
+            cn = ConnectionHelper.getConnection();
+            ps = cn.prepareStatement(QTPL_INSERT_USER, new String[] { "user_id" });
             ps.setString(1, user.getFirstName());
             ps.setString(2, user.getLastName());
             ps.setString(3, user.getEmail());
             ps.executeUpdate();
+            rs = ps.getGeneratedKeys();
 
-            ResultSet rs = ps.getGeneratedKeys();
             if (rs.next()) {
                 int userId = rs.getInt(1);
                 user.setUserId(userId);
@@ -187,7 +216,9 @@ public class UserDAOImpl implements UserDAO {
             e.printStackTrace();
             throw new RuntimeException(e);
         } finally {
-            ConnectionHelper.close(c);
+            try { rs.close(); } catch (SQLException e) { e.printStackTrace(); }
+            try { ps.close(); } catch (SQLException e) { e.printStackTrace(); }
+            try { cn.close(); } catch (SQLException e) { e.printStackTrace(); }
         }
         return user;
     }
@@ -196,11 +227,12 @@ public class UserDAOImpl implements UserDAO {
     public User updateUserByUserId(User user, int userId) {
         assert user.getUserId() == userId;
 
-        Connection c = null;
+        Connection cn = null;
+        PreparedStatement ps = null;
 
         try {
-            c = ConnectionHelper.getConnection();
-            PreparedStatement ps = c.prepareStatement(QTPL_UPDATE_USER);
+            cn = ConnectionHelper.getConnection();
+            ps = cn.prepareStatement(QTPL_UPDATE_USER);
             ps.setString(1, user.getFirstName());
             ps.setString(2, user.getLastName());
             ps.setString(3, user.getEmail());
@@ -210,25 +242,28 @@ public class UserDAOImpl implements UserDAO {
             e.printStackTrace();
             throw new RuntimeException(e);
         } finally {
-            ConnectionHelper.close(c);
+            try { ps.close(); } catch (SQLException e) { e.printStackTrace(); }
+            try { cn.close(); } catch (SQLException e) { e.printStackTrace(); }
         }
         return user;
     }
 
     @Override
     public void deleteUserByUserId(int userId) {
-        Connection c = null;
+        Connection cn = null;
+        PreparedStatement ps = null;
 
         try {
-            c = ConnectionHelper.getConnection();
-            PreparedStatement ps = c.prepareStatement(QTPL_DELETE_USER);
+            cn = ConnectionHelper.getConnection();
+            ps = cn.prepareStatement(QTPL_DELETE_USER);
             ps.setInt(1, userId);
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
         } finally {
-            ConnectionHelper.close(c);
+            try { ps.close(); } catch (SQLException e) { e.printStackTrace(); }
+            try { cn.close(); } catch (SQLException e) { e.printStackTrace(); }
         }
     }
 

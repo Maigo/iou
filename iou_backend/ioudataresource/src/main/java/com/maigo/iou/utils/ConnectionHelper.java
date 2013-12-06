@@ -1,24 +1,24 @@
 package com.maigo.iou.utils;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.ResourceBundle;
+
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
 
 public class ConnectionHelper {
-    private String url;
     private static ConnectionHelper instance;
 
+    private DataSource dataSource = null;
+
     private ConnectionHelper() {
-//        String driver = null;
         try {
-            Class.forName("com.mysql.jdbc.Driver");
-            url = "jdbc:mysql://localhost/db_iou";//?user=root";
-//            ResourceBundle bundle = ResourceBundle.getBundle("iou");
-//            driver = bundle.getString("jdbc.driver");
-//            Class.forName(driver);
-//            url = bundle.getString("jdbc.url");
-        } catch (Exception e) {
+            Context initContext = new InitialContext();
+            Context envContext = (Context) initContext.lookup("java:/comp/env");
+            this.dataSource = (DataSource) envContext.lookup("jdbc/iouDB");
+        } catch (NamingException e) {
             e.printStackTrace();
         }
     }
@@ -28,8 +28,7 @@ public class ConnectionHelper {
             instance = new ConnectionHelper();
         }
         try {
-            System.out.println(instance.url);
-            return DriverManager.getConnection(instance.url, "root", "admin");
+            return instance.dataSource.getConnection();
         } catch (SQLException e) {
             throw e;
         }

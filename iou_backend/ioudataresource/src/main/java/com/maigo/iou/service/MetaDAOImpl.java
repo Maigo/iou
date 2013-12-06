@@ -20,12 +20,15 @@ public class MetaDAOImpl implements MetaDAO {
     @Override
     public List<MetaObject> getGroupMetaData() {
         List<MetaObject> list = new ArrayList<MetaObject>();
-        Connection c = null;
+
+        Connection cn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
 
         try {
-            c = ConnectionHelper.getConnection();
-            PreparedStatement ps = c.prepareStatement(QTPL_SELECT_GROUP_META);
-            ResultSet rs = ps.executeQuery();
+            cn = ConnectionHelper.getConnection();
+            ps = cn.prepareStatement(QTPL_SELECT_GROUP_META);
+            rs = ps.executeQuery();
 
             while (rs.next()) {
                 list.add(processResultSet(rs));
@@ -34,7 +37,9 @@ public class MetaDAOImpl implements MetaDAO {
             e.printStackTrace();
             throw new RuntimeException(e);
         } finally {
-            ConnectionHelper.close(c);
+            try { rs.close(); } catch (SQLException e) { e.printStackTrace(); }
+            try { ps.close(); } catch (SQLException e) { e.printStackTrace(); }
+            try { cn.close(); } catch (SQLException e) { e.printStackTrace(); }
         }
         return list;
     }

@@ -25,12 +25,15 @@ public class EventDAOImpl implements EventDAO {
     @Override
     public List<Event> findEventAll() {
         List<Event> list = new ArrayList<Event>();
-        Connection c = null;
+
+        Connection cn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
 
         try {
-            c = ConnectionHelper.getConnection();
-            PreparedStatement ps = c.prepareStatement(QTPL_SELECT_ALL);
-            ResultSet rs = ps.executeQuery();
+            cn = ConnectionHelper.getConnection();
+            ps = cn.prepareStatement(QTPL_SELECT_ALL);
+            rs = ps.executeQuery();
 
             while (rs.next()) {
                 list.add(processResultSet(rs));
@@ -39,7 +42,9 @@ public class EventDAOImpl implements EventDAO {
             e.printStackTrace();
             throw new RuntimeException(e);
         } finally {
-            ConnectionHelper.close(c);
+            try { rs.close(); } catch (SQLException e) { e.printStackTrace(); }
+            try { ps.close(); } catch (SQLException e) { e.printStackTrace(); }
+            try { cn.close(); } catch (SQLException e) { e.printStackTrace(); }
         }
         return list;
     }
@@ -47,13 +52,16 @@ public class EventDAOImpl implements EventDAO {
     @Override
     public Event findEventByEventId(int eventId) {
         Event event = null;
-        Connection c = null;
+
+        Connection cn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
 
         try {
-            c = ConnectionHelper.getConnection();
-            PreparedStatement ps = c.prepareStatement(QTPL_SELECT_BY_EVENT_ID);
+            cn = ConnectionHelper.getConnection();
+            ps = cn.prepareStatement(QTPL_SELECT_BY_EVENT_ID);
             ps.setInt(1, eventId);
-            ResultSet rs = ps.executeQuery();
+            rs = ps.executeQuery();
 
             if (rs.next()) {
                 event = processResultSet(rs);
@@ -62,7 +70,9 @@ public class EventDAOImpl implements EventDAO {
             e.printStackTrace();
             throw new RuntimeException(e);
         } finally {
-            ConnectionHelper.close(c);
+            try { rs.close(); } catch (SQLException e) { e.printStackTrace(); }
+            try { ps.close(); } catch (SQLException e) { e.printStackTrace(); }
+            try { cn.close(); } catch (SQLException e) { e.printStackTrace(); }
         }
         return event;
     }
@@ -70,13 +80,16 @@ public class EventDAOImpl implements EventDAO {
     @Override
     public List<Event> findEventByUserId(int userId) {
         List<Event> list = new ArrayList<Event>();
-        Connection c = null;
+
+        Connection cn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
 
         try {
-            c = ConnectionHelper.getConnection();
-            PreparedStatement ps = c.prepareStatement(QTPL_SELECT_BY_USER_ID);
+            cn = ConnectionHelper.getConnection();
+            ps = cn.prepareStatement(QTPL_SELECT_BY_USER_ID);
             ps.setInt(1, userId);
-            ResultSet rs = ps.executeQuery();
+            rs = ps.executeQuery();
 
             while (rs.next()) {
                 list.add(processResultSet(rs));
@@ -85,7 +98,9 @@ public class EventDAOImpl implements EventDAO {
             e.printStackTrace();
             throw new RuntimeException(e);
         } finally {
-            ConnectionHelper.close(c);
+            try { rs.close(); } catch (SQLException e) { e.printStackTrace(); }
+            try { ps.close(); } catch (SQLException e) { e.printStackTrace(); }
+            try { cn.close(); } catch (SQLException e) { e.printStackTrace(); }
         }
         return list;
     }
@@ -93,15 +108,17 @@ public class EventDAOImpl implements EventDAO {
     @Override
     public Event findEventByEventIdAndUserId(int eventId, int userId) {
         Event event = null;
-        Connection c = null;
+
+        Connection cn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
 
         try {
-            c = ConnectionHelper.getConnection();
-            PreparedStatement ps = c
-                    .prepareStatement(QTPL_SELECT_BY_USER_ID_AND_EVENT_ID);
+            cn = ConnectionHelper.getConnection();
+            ps = cn.prepareStatement(QTPL_SELECT_BY_USER_ID_AND_EVENT_ID);
             ps.setInt(1, userId);
             ps.setInt(2, eventId);
-            ResultSet rs = ps.executeQuery();
+            rs = ps.executeQuery();
 
             if (rs.next()) {
                 event = processResultSet(rs);
@@ -110,25 +127,29 @@ public class EventDAOImpl implements EventDAO {
             e.printStackTrace();
             throw new RuntimeException(e);
         } finally {
-            ConnectionHelper.close(c);
+            try { rs.close(); } catch (SQLException e) { e.printStackTrace(); }
+            try { ps.close(); } catch (SQLException e) { e.printStackTrace(); }
+            try { cn.close(); } catch (SQLException e) { e.printStackTrace(); }
         }
         return event;
     }
 
     @Override
     public Event createEvent(Event event) {
-        Connection c = null;
+        Connection cn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
 
         try {
-            c = ConnectionHelper.getConnection();
-            PreparedStatement ps = c.prepareStatement(QTPL_INSERT_EVENT,
+            cn = ConnectionHelper.getConnection();
+            ps = cn.prepareStatement(QTPL_INSERT_EVENT,
                     new String[] { "event_id" });
             ps.setString(1, event.getName());
             ps.setString(2, event.getDescription());
             ps.setString(3, event.getDate());
             ps.executeUpdate();
 
-            ResultSet rs = ps.getGeneratedKeys();
+            rs = ps.getGeneratedKeys();
             if (rs.next()) {
                 int eventId = rs.getInt(1);
                 event.setEventId(eventId);
@@ -137,7 +158,9 @@ public class EventDAOImpl implements EventDAO {
             e.printStackTrace();
             throw new RuntimeException(e);
         } finally {
-            ConnectionHelper.close(c);
+            try { rs.close(); } catch (SQLException e) { e.printStackTrace(); }
+            try { ps.close(); } catch (SQLException e) { e.printStackTrace(); }
+            try { cn.close(); } catch (SQLException e) { e.printStackTrace(); }
         }
         return event;
     }
@@ -146,11 +169,12 @@ public class EventDAOImpl implements EventDAO {
     public Event updateEventByEventId(Event event, int eventId) {
         assert event.getEventId() == eventId;
 
-        Connection c = null;
+        Connection cn = null;
+        PreparedStatement ps = null;
 
         try {
-            c = ConnectionHelper.getConnection();
-            PreparedStatement ps = c.prepareStatement(QTPL_UPDATE_EVENT);
+            cn = ConnectionHelper.getConnection();
+            ps = cn.prepareStatement(QTPL_UPDATE_EVENT);
             ps.setString(1, event.getName());
             ps.setString(2, event.getDescription());
             ps.setString(3, event.getDate());
@@ -160,25 +184,28 @@ public class EventDAOImpl implements EventDAO {
             e.printStackTrace();
             throw new RuntimeException(e);
         } finally {
-            ConnectionHelper.close(c);
+            try { ps.close(); } catch (SQLException e) { e.printStackTrace(); }
+            try { cn.close(); } catch (SQLException e) { e.printStackTrace(); }
         }
         return event;
     }
 
     @Override
     public void deleteEventByEventId(int eventId) {
-        Connection c = null;
+        Connection cn = null;
+        PreparedStatement ps = null;
 
         try {
-            c = ConnectionHelper.getConnection();
-            PreparedStatement ps = c.prepareStatement(QTPL_DELETE_EVENT);
+            cn = ConnectionHelper.getConnection();
+            ps = cn.prepareStatement(QTPL_DELETE_EVENT);
             ps.setInt(1, eventId);
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
         } finally {
-            ConnectionHelper.close(c);
+            try { ps.close(); } catch (SQLException e) { e.printStackTrace(); }
+            try { cn.close(); } catch (SQLException e) { e.printStackTrace(); }
         }
     }
 
